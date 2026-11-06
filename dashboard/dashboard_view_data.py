@@ -6,7 +6,10 @@ from dashboard.data_processing import load_data, prepare_data
 def filter_from_date(data: pd.DataFrame, start: str) -> pd.DataFrame:
     if data.empty or "Date" not in data.columns:
         return data
-    return data[pd.to_datetime(data["Date"], errors="coerce") >= pd.Timestamp(start)]
+    dates = pd.to_datetime(data["Date"], errors="coerce")
+    if getattr(dates.dt, "tz", None) is not None:
+        dates = dates.dt.tz_localize(None)
+    return data[dates >= pd.Timestamp(start)]
 
 
 def prepare_ipp_monthly(actuals: pd.DataFrame, forecasts: pd.DataFrame):

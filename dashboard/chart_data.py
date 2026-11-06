@@ -48,7 +48,7 @@ def monthly_total_per_calendar_day(
     subset = data.copy()
     if forecast_only:
         subset = subset[subset["Forecast"] != "Actuals"]
-        group_columns = ["Week", "Forecast"]
+        group_columns = ["Period", "Forecast"]
     else:
         subset = subset[subset["Forecast"] == "Actuals"]
         group_columns = ["Period", "WellStatus"] if "WellStatus" in subset.columns else ["Period"]

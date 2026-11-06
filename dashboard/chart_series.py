@@ -16,6 +16,11 @@ def format_period(value, period_column: str) -> str:
     return value.strftime("%d %b %Y") if period_column == "Week" else value.strftime("%b %Y")
 
 
+def datetime_bar_width(period_column: str) -> int:
+    days = 6 if period_column == "Week" else 20
+    return days * 24 * 60 * 60 * 1000
+
+
 def add_actual_series(
     plot,
     actuals: pd.DataFrame,
@@ -77,7 +82,7 @@ def add_actual_series(
             ))
             renderer = plot.vbar(
                 x="x", bottom="bottom", top="top",
-                width=0.75 if not x_is_datetime else 20 * 24 * 60 * 60 * 1000,
+                width=0.75 if not x_is_datetime else datetime_bar_width(period_column),
                 source=source, color=colour, alpha=0.35,
                 line_color=SHELL_VERY_DARK_GREY,
                 legend_label=f"Actuals · {status_name}",
@@ -100,7 +105,7 @@ def add_actual_series(
             ))
             renderer = plot.vbar(
                 x="x", top="top",
-                width=0.75 if not x_is_datetime else 20 * 24 * 60 * 60 * 1000,
+                width=0.75 if not x_is_datetime else datetime_bar_width(period_column),
                 source=source, color=SHELL_YELLOW, alpha=0.35,
                 line_color=SHELL_VERY_DARK_GREY, legend_label="Actuals",
             )

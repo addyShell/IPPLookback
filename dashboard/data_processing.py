@@ -32,6 +32,8 @@ def prepare_data(actuals: pd.DataFrame, forecasts: pd.DataFrame) -> pd.DataFrame
     if not actuals.empty:
         actuals = actuals.copy()
         actuals["Date"] = pd.to_datetime(actuals["PRODUCTION_DATETIME"])
+        if getattr(actuals["Date"].dt, "tz", None) is not None:
+            actuals["Date"] = actuals["Date"].dt.tz_localize(None)
         frames.append(actuals)
 
         if {"FACILITY_06_SHORT_NAME", "WellStatus"}.issubset(actuals.columns):
@@ -46,6 +48,8 @@ def prepare_data(actuals: pd.DataFrame, forecasts: pd.DataFrame) -> pd.DataFrame
     if not forecasts.empty:
         forecasts = forecasts.copy()
         forecasts["Date"] = pd.to_datetime(forecasts["Prod Date"])
+        if getattr(forecasts["Date"].dt, "tz", None) is not None:
+            forecasts["Date"] = forecasts["Date"].dt.tz_localize(None)
         if "FACILITY_06_SHORT_NAME" in forecasts.columns:
             forecasts["WellStatus"] = forecasts["FACILITY_06_SHORT_NAME"].map(status_by_well)
         frames.append(forecasts)
@@ -106,7 +110,10 @@ def get_filter_options(data: pd.DataFrame) -> dict[str, list[str]]:
     return {
         "facility": sorted(data["Facility"].dropna().unique().tolist()),
         "well": sorted(data["Well"].dropna().unique().tolist()),
-        "well_status": sorted(data["WellStatus"].dropna().unique().tolist()),
+        "well_status": (
+            sorted(data["WellStatus"].dropna().unique().tolist())
+            if "WellStatus" in data.columns else []
+        ),
     }
 
 

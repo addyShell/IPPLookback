@@ -1,0 +1,94 @@
+PRODUCT REQUEST
+
+Build a production lookback application for comparing forecast and actual production
+for Shell Gulf of America assets.
+
+The product must provide:
+
+1. Three separate views in a Dash application:
+   - OP Lookback
+   - IPP Lookback
+   - IPP Weekly
+
+2. OP Lookback requirements:
+   - Compare production year by year.
+   - Use OP forecast and actuals data.
+   - Classify wells into NFA20, New20 through New25, No AFS, and Unknown
+     categories where the source data supports them.
+   - Show the annual stacked production chart.
+   - Do not show a ratio table.
+   - Keep status-based actual colours distinct from forecast colours.
+
+3. IPP Lookback requirements:
+   - Compare IPP forecasts and actuals month by month.
+   - Include data from January 2025 onward.
+   - Do not recognise NFA20, New20, New25, No AFS, or other well statuses.
+   - Show actual production as a yellow bar series.
+   - Show each forecast vintage as a coloured line series.
+   - Show a ratio table below the graph.
+   - Each table column represents a month.
+   - Actuals should be shown as 100%.
+   - For each forecast row, calculate Forecast divided by Actuals multiplied by 100.
+   - Highlight forecast-to-actual ratios outside 96% to 104% in red.
+   - Synchronise the visible table columns with the graph x-axis range.
+
+4. IPP Weekly requirements:
+   - Compare IPP forecasts and actuals week by week.
+   - Include data from January 2026 onward.
+   - Use Monday as the start of every week.
+   - Label table columns by the date of the week's starting Monday.
+   - Do not recognise or stack well-status categories.
+   - Show actual production and forecast vintages on the chart.
+   - Show a forecast/actual ratio table below the graph.
+   - Synchronise the visible table columns with the graph x-axis range.
+
+5. Filtering:
+   - Each view must support facility and well filtering.
+   - OP Lookback must also support well-status filtering.
+   - IPP Lookback and IPP Weekly must not expose status filters or status-based
+     stacking because well status is outside their data model.
+   - A view must use only data loaded for that view.
+
+6. Independent data sources:
+   - OP Lookback, IPP monthly lookback, and IPP weekly lookback must remain
+     independent.
+   - Actuals are the only shared conceptual data source where permitted.
+   - Use separate SQL queries and preparation paths for each view.
+   - Do not reuse OP classifications in either IPP view.
+
+7. Databricks integration:
+   - Connect to Databricks SQL through the existing SQL warehouse.
+   - Use OAuth U2M authentication for interactive Dash use.
+   - Refresh each view independently from Databricks.
+   - Use separate query keys for monthly actuals, monthly IPP forecasts, OP
+     forecasts, weekly actuals, and weekly IPP forecasts.
+
+8. Technical implementation:
+   - Use Dash 2, Pandas 2, Bokeh 3, and the Databricks SQL connector.
+   - Keep Python source files no longer than 150 lines.
+   - Keep the application responsive and usable in a standard browser.
+   - Use clear separation between layout, callbacks, SQL loading, data processing,
+     chart aggregation, chart rendering, colours, and table logic.
+   - Use the Shell colour palette consistently.
+
+9. Shell colour requirements:
+   - Use Shell yellow for IPP actual bars.
+   - Use OP-specific colours for annual years and New statuses.
+   - Use dark grey for No AFS and shell palettes where additional colours are needed.
+   - Keep the colour order stable, predictable, and free from arbitrary reversal.
+   - Forecast vintages should have consistent colours based on their year or name.
+
+10. Delivery formats:
+    - Provide a Dash application for internal interactive use.
+    - Place the Dash application and its source code on GitHub.
+    - Provide an interactive HTML deliverable that can be shared with users who do
+      not have Databricks access when the required HTML export is requested.
+    - Do not place the standalone interactive HTML on GitHub.
+    - Do not include standalone HTML, standalone Bokeh modules, or standalone
+      exporter files in version control; only the Dash application should be
+      published in the repository.
+
+11. Version control:
+    - Track the Dash and SQL implementation in the GitHub repository.
+    - Use feature branches for implementation work.
+    - Do not commit sensitive credentials or standalone export artifacts.
