@@ -1,0 +1,58 @@
+PRODUCT REQUEST - BASELINE
+
+Build an interactive production lookback application for comparing forecast and
+actual production for Shell Gulf of America assets.
+
+The baseline product must provide two independent Dash views:
+
+1. IPP Lookback
+   - Compare IPP forecasts and actuals month by month.
+   - Include monthly data from January 2025 onward.
+   - Aggregate actual production without well-status classification.
+   - Show actuals as Shell yellow bars.
+   - Show each IPP forecast vintage as a coloured line.
+   - Show a forecast/actual ratio table below the chart.
+   - Use month columns in the table.
+   - Show actuals as 100%.
+   - Calculate each forecast ratio as Forecast divided by Actuals multiplied by 100.
+   - Highlight ratios outside 96% to 104% in red.
+   - Synchronise the visible table columns with the chart x-axis range.
+
+2. OP Lookback
+   - Compare OP production year by year.
+   - Use independent OP actuals and forecasts.
+   - Classify actual wells into NFA20, New20 through New25, No AFS, and
+     Unknown categories where supported.
+   - Show a stacked annual production chart by well status.
+   - Do not show a ratio table.
+   - Preserve the distinct OP status colours and forecast colours.
+
+3. Independent filtering
+   - Provide facility and well filters for both views.
+   - Provide a well-status filter for OP Lookback.
+   - Do not expose well-status filters or status stacking in IPP Lookback.
+   - Keep the OP and IPP datasets and processing paths independent.
+
+4. Databricks integration
+   - Load source data through the existing Databricks SQL warehouse.
+   - Use OAuth U2M authentication for interactive Dash use.
+   - Refresh data independently from the application interface.
+   - Use separate SQL/query registrations for actuals and forecast datasets.
+
+5. Technical baseline
+   - Use Dash 2, Pandas 2, Bokeh 3, and the Databricks SQL connector.
+   - Keep Python source files no longer than 150 lines.
+   - Separate layout, callbacks, SQL loading, data processing, chart aggregation,
+     chart rendering, colour configuration, and table logic.
+   - Keep the application responsive in a standard browser.
+   - Use a consistent Shell colour palette with stable colour ordering.
+
+6. Delivery and version control
+   - The Dash application and its source code must be placed on GitHub.
+   - The GitHub repository is the version-controlled source for the Dash
+     application and SQL integration.
+   - The standalone interactive HTML deliverable may be generated locally and
+     shared with users who do not have Databricks access.
+   - The standalone interactive HTML must not be placed on GitHub.
+   - Standalone Bokeh modules and standalone HTML exporters must not be committed.
+   - Do not commit credentials or sensitive configuration.
