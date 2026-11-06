@@ -1,0 +1,4 @@
+dash>=2.18,<3
+databricks-sql-connector>=3.0,<4
+pandas>=2.2,<3
+bokeh>=3.6,<4

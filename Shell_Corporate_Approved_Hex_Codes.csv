@@ -1,0 +1,57 @@
+Category,Colour Name,Tint / Strength,Hex Code,Usage Restriction
+Primary,Shell Yellow,100%,#FBCE07,Allowed for approved electronic/digital use
+Primary,Shell Yellow,60%,#FDE26A,Allowed for approved electronic/digital use
+Primary,Shell Yellow,40%,#FDEB9C,Allowed for approved electronic/digital use
+Primary,Shell Yellow,20%,#FEF5CD,Allowed for approved electronic/digital use
+Primary,Shell Red,100%,#DD1D21,Allowed for approved electronic/digital use
+Primary,Shell Red,60%,#EB777A,Allowed for approved electronic/digital use
+Primary,Shell Red,40%,#F1A5A6,Allowed for approved electronic/digital use
+Primary,Shell Red,20%,#F8D2D3,Allowed for approved electronic/digital use
+Primary,Shell White,100%,#FFFFFF,Allowed for approved electronic/digital use
+Primary,Shell Dark Blue,100%,#003C88,Allowed for approved electronic/digital use
+Primary,Shell Dark Blue,60%,#668AB8,Allowed for approved electronic/digital use
+Primary,Shell Dark Blue,40%,#99B1CF,Allowed for approved electronic/digital use
+Primary,Shell Dark Blue,20%,#CCD8E7,Allowed for approved electronic/digital use
+Primary,Shell Mid Blue,100%,#009EB4,Allowed for approved electronic/digital use
+Primary,Shell Mid Blue,60%,#66C5D2,Allowed for approved electronic/digital use
+Primary,Shell Mid Blue,40%,#99D8E1,Allowed for approved electronic/digital use
+Primary,Shell Mid Blue,20%,#CCECF0,Allowed for approved electronic/digital use
+Primary,Shell Light Blue,100%,#89CFDC,Allowed for approved electronic/digital use
+Primary,Shell Light Blue,60%,#B8E2EA,Allowed for approved electronic/digital use
+Primary,Shell Light Blue,40%,#D0ECF1,Allowed for approved electronic/digital use
+Primary,Shell Light Blue,20%,#E7F5F8,Allowed for approved electronic/digital use
+Supporting,Shell Dark Green,100%,#008443,Allowed for approved electronic/digital use
+Supporting,Shell Dark Green,60%,#66B58E,Allowed for approved electronic/digital use
+Supporting,Shell Dark Green,40%,#99CEB4,Allowed for approved electronic/digital use
+Supporting,Shell Dark Green,20%,#CCE6D9,Allowed for approved electronic/digital use
+Supporting,Shell Light Green,100%,#BED50F,Allowed for approved electronic/digital use
+Supporting,Shell Light Green,60%,#D8E66F,Allowed for approved electronic/digital use
+Supporting,Shell Light Green,40%,#E5EE9F,Allowed for approved electronic/digital use
+Supporting,Shell Light Green,20%,#F2F7CF,Allowed for approved electronic/digital use
+Supporting,Shell Orange,100%,#EB8705,Allowed for approved electronic/digital use
+Supporting,Shell Orange,60%,#F3B769,Allowed for approved electronic/digital use
+Supporting,Shell Orange,40%,#F7CF9B,Allowed for approved electronic/digital use
+Supporting,Shell Orange,20%,#FBE7CD,Allowed for approved electronic/digital use
+Supporting,Shell Brown,100%,#743410,Allowed for approved electronic/digital use
+Supporting,Shell Brown,60%,#AC8570,Allowed for approved electronic/digital use
+Supporting,Shell Brown,40%,#C7AE9F,Allowed for approved electronic/digital use
+Supporting,Shell Brown,20%,#E3D6CF,Allowed for approved electronic/digital use
+Supporting,Shell Sand,100%,#FFEAC2,Allowed for approved electronic/digital use
+Supporting,Shell Sand,60%,#FFF2DA,Allowed for approved electronic/digital use
+Supporting,Shell Sand,40%,#FFF7E7,Allowed for approved electronic/digital use
+Supporting,Shell Sand,20%,#FFFBF3,Allowed for approved electronic/digital use
+Supporting,Shell Purple,100%,#641964,Allowed for approved electronic/digital use
+Supporting,Shell Purple,60%,#A275A2,Allowed for approved electronic/digital use
+Supporting,Shell Purple,40%,#C1A3C1,Allowed for approved electronic/digital use
+Supporting,Shell Purple,20%,#E0D1E0,Allowed for approved electronic/digital use
+Supporting,Shell Lilac,100%,#BA95BE,Allowed for approved electronic/digital use
+Supporting,Shell Lilac,60%,#D6BFD8,Allowed for approved electronic/digital use
+Supporting,Shell Lilac,40%,#E3D5E5,Allowed for approved electronic/digital use
+Supporting,Shell Lilac,20%,#F1EAF2,Allowed for approved electronic/digital use
+Neutral,Shell Dark Grey,100%,#404040,Approved digital/electronic neutral
+Neutral,Shell Mid Grey,100%,#595959,Approved digital/electronic neutral
+Neutral,Shell Light Grey,100%,#7F7F7F,Approved digital/electronic neutral
+Neutral,Shell Pale Grey,100%,#A6A6A6,Approved digital/electronic neutral
+Neutral,Shell Pale Grey (neutral comparison),100%,#D9D9D9,Neutral comparison; digital specification
+Neutral,Shell Very Dark Grey,100%,#404040,Ring-fenced for Shell web/mobile; replaces black for digital use only
+Neutral,Shell Very Pale Grey,100%,#F7F7F7,Ring-fenced for Shell web/mobile; not an additional general palette neutral

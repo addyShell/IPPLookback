@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.vscode/
+
+# Standalone export artifacts and implementation are not version-controlled
+standalone*.html
+standalone_*.html
+standalone_bokeh*.py
+export_standalone*.py
+*.standalone.html
