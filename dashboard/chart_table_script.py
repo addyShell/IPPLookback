@@ -31,9 +31,15 @@ def percentage_table_script(table_data_json: str) -> str:
     for (const month of visible) {
       const cell = document.createElement("th");
       cell.style.textAlign = "right";
-      cell.textContent = new Date(month.timestamp).toLocaleDateString("en-US", {
-        month: "short", year: "numeric", timeZone: "UTC"
-      });
+      const periodDate = new Date(month.timestamp);
+      cell.textContent = /^\d{4}-/.test(month.key)
+        ? periodDate.toLocaleDateString("en-US", {
+            weekday: "short", day: "2-digit", month: "short",
+            year: "numeric", timeZone: "UTC"
+          })
+        : periodDate.toLocaleDateString("en-US", {
+            month: "short", year: "numeric", timeZone: "UTC"
+          });
       header.appendChild(cell);
     }
     body.innerHTML = "";

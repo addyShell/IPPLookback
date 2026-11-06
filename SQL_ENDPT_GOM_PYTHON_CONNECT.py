@@ -11,6 +11,8 @@ QUERY_FILES = {
     "Actuals": SCRIPT_DIR / "actuals_databricks.sql",
     "OP_Forecasts": SCRIPT_DIR / "op_forecasts_databricks.sql",
     "IPP_Forecasts": SCRIPT_DIR / "ipp_forecasts_databricks.sql",
+    "Actuals_Weekly": SCRIPT_DIR / "actuals_weekly_databricks.sql",
+    "IPP_Weekly_Forecasts": SCRIPT_DIR / "ipp_weekly_forecasts_databricks.sql",
 }
 
 

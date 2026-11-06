@@ -48,7 +48,7 @@ def monthly_total_per_calendar_day(
     subset = data.copy()
     if forecast_only:
         subset = subset[subset["Forecast"] != "Actuals"]
-        group_columns = ["Period", "Forecast"]
+        group_columns = ["Week", "Forecast"]
     else:
         subset = subset[subset["Forecast"] == "Actuals"]
         group_columns = ["Period", "WellStatus"] if "WellStatus" in subset.columns else ["Period"]
@@ -71,4 +71,38 @@ def monthly_total_per_calendar_day(
         )[1] / 1000.0,
         axis=1,
     )
+    return result
+
+
+def weekly_total_per_calendar_day(
+    data: pd.DataFrame,
+    metric: str,
+    forecast_only: bool = False,
+) -> pd.DataFrame:
+    if data.empty or metric not in data.columns or "Date" not in data.columns:
+        return pd.DataFrame()
+
+    subset = data.copy()
+    if forecast_only:
+        subset = subset[subset["Forecast"] != "Actuals"]
+        group_columns = ["Week", "Forecast"]
+    else:
+        subset = subset[subset["Forecast"] == "Actuals"]
+        group_columns = (
+            ["Week", "WellStatus"]
+            if "WellStatus" in subset.columns else ["Week"]
+        )
+
+    subset[metric] = pd.to_numeric(subset[metric], errors="coerce")
+    dates = pd.to_datetime(subset["Date"], errors="coerce")
+    if getattr(dates.dt, "tz", None) is not None:
+        dates = dates.dt.tz_localize(None)
+    subset["Week"] = dates - pd.to_timedelta(dates.dt.weekday, unit="D")
+
+    if not forecast_only and "WellStatus" in subset.columns:
+        subset["WellStatus"] = subset["WellStatus"].fillna("Unknown")
+
+    result = subset.groupby(group_columns, as_index=False)[metric].sum(min_count=1)
+    if not result.empty:
+        result[metric] = result[metric] / 7.0 / 1000.0
     return result

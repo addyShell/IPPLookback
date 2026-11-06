@@ -61,6 +61,20 @@ def register_callbacks(
         if refresh_triggered:
             actuals, forecasts = load_data(forecast_key)
             data_state["combined_data"] = prepare_data(actuals, forecasts)
+            if period == "month":
+                data_state["combined_data"] = data_state["combined_data"][
+                    data_state["combined_data"]["Date"] >= "2025-01-01"
+                ]
+                data_state["combined_data"] = data_state["combined_data"].drop(
+                    columns=["WellStatus"], errors="ignore"
+                )
+            elif period == "week":
+                data_state["combined_data"] = data_state["combined_data"][
+                    data_state["combined_data"]["Date"] >= "2026-01-01"
+                ]
+                data_state["combined_data"] = data_state["combined_data"].drop(
+                    columns=["WellStatus"], errors="ignore"
+                )
             status = (
                 f"Refreshed {len(data_state['combined_data']):,} records from Databricks"
             )

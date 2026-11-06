@@ -4,6 +4,7 @@ import math
 import pandas as pd
 
 from dashboard.chart_data import monthly_total_per_calendar_day
+from dashboard.chart_data import weekly_total_per_calendar_day
 
 
 def build_percentage_table(
@@ -86,3 +87,76 @@ def serialize_percentage_table(
         for month in visible_months
     ]
     return json.dumps({"months": table_months, "rows": serializable_rows})
+
+
+def build_weekly_percentage_table(
+    data: pd.DataFrame,
+    metric: str,
+    week_count: int | None = None,
+) -> tuple[list[pd.Timestamp], list[dict]]:
+    actuals = weekly_total_per_calendar_day(data, metric, forecast_only=False)
+    forecasts = weekly_total_per_calendar_day(data, metric, forecast_only=True)
+    if actuals.empty and forecasts.empty:
+        return [], []
+
+    all_periods = pd.concat([
+        actuals["Week"] if not actuals.empty else pd.Series(dtype="datetime64[ns]"),
+        forecasts["Week"] if not forecasts.empty else pd.Series(dtype="datetime64[ns]"),
+    ], ignore_index=True).dropna()
+    if all_periods.empty:
+        return [], []
+
+    latest = pd.to_datetime(all_periods.max())
+    first = (
+        pd.to_datetime(all_periods.min())
+        if week_count is None
+        else latest - pd.Timedelta(weeks=week_count - 1)
+    )
+    visible_weeks = list(pd.date_range(first, latest, freq="W-MON"))
+    actual_lookup = (
+        actuals.groupby("Week", as_index=False)[metric].sum()
+        .set_index("Week")[metric].to_dict()
+        if not actuals.empty else {}
+    )
+    rows = []
+    if actual_lookup:
+        rows.append({
+            "label": "Actuals",
+            **{week: "100%" if actual_lookup.get(week) not in (None, 0) else "—"
+               for week in visible_weeks},
+        })
+    if not forecasts.empty:
+        for name in sorted(forecasts["Forecast"].dropna().unique(), reverse=True):
+            lookup = forecasts[forecasts["Forecast"] == name].set_index("Week")[metric].to_dict()
+            cells = {
+                week: (
+                    f"{float(lookup[week]) / float(actual_lookup[week]) * 100:.1f}%"
+                    if week in lookup and week in actual_lookup
+                    and float(actual_lookup[week]) != 0 else "—"
+                )
+                for week in visible_weeks
+            }
+            if any(value != "—" for value in cells.values()):
+                rows.append({"label": str(name), **cells})
+    return visible_weeks, rows
+
+
+def serialize_weekly_percentage_table(
+    visible_weeks: list[pd.Timestamp],
+    table_rows: list[dict],
+) -> str:
+    serializable_rows = []
+    for row in table_rows:
+        serializable_rows.append({
+            "label": row["label"],
+            "cells": {
+                week.strftime("%Y-%m-%d"): value
+                for week, value in row.items()
+                if isinstance(week, pd.Timestamp)
+            },
+        })
+    table_weeks = [
+        {"key": week.strftime("%Y-%m-%d"), "timestamp": week.value // 1_000_000}
+        for week in visible_weeks
+    ]
+    return json.dumps({"months": table_weeks, "rows": serializable_rows})

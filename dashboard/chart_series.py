@@ -10,6 +10,12 @@ from dashboard.colours import (
 )
 
 
+def format_period(value, period_column: str) -> str:
+    if not hasattr(value, "strftime"):
+        return str(value)
+    return value.strftime("%d %b %Y") if period_column == "Week" else value.strftime("%b %Y")
+
+
 def add_actual_series(
     plot,
     actuals: pd.DataFrame,
@@ -19,7 +25,7 @@ def add_actual_series(
     forecast_colours: dict,
 ):
     renderers = []
-    x_is_datetime = period_column == "Period"
+    x_is_datetime = period_column in {"Period", "Week"}
 
     if use_well_status and not actuals.empty and "WellStatus" in actuals.columns:
         actuals["WellStatus"] = actuals["WellStatus"].replace("NFA", "NFA20")
@@ -64,7 +70,7 @@ def add_actual_series(
                 top=top_values,
                 value=status_actuals[metric].tolist(),
                 period=[
-                    value.strftime("%b %Y") if hasattr(value, "strftime") else str(value)
+                    format_period(value, period_column)
                     for value in x_values
                 ],
                 label=[f"Actuals · {status_name}" for _ in x_values],
@@ -87,7 +93,7 @@ def add_actual_series(
                 top=actuals[metric].tolist(),
                 value=actuals[metric].tolist(),
                 period=[
-                    value.strftime("%b %Y") if hasattr(value, "strftime") else str(value)
+                    format_period(value, period_column)
                     for value in x_values
                 ],
                 label=["Actuals" for _ in x_values],
@@ -127,7 +133,7 @@ def add_forecast_series(
             y=forecast[metric].tolist(),
             value=forecast[metric].tolist(),
             period=[
-                value.strftime("%b %Y") if hasattr(value, "strftime") else str(value)
+                format_period(value, period_column)
                 for value in forecast[period_column].tolist()
             ],
             label=[str(forecast_name) for _ in forecast[period_column]],

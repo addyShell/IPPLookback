@@ -4,9 +4,12 @@ from SQL_ENDPT_GOM_PYTHON_CONNECT import load_results
 
 
 def load_data(forecast_key: str = "OP_Forecasts") -> tuple[pd.DataFrame, pd.DataFrame]:
-    results = load_results(names=("Actuals", forecast_key))
+    actuals_key = (
+        "Actuals_Weekly" if forecast_key == "IPP_Weekly_Forecasts" else "Actuals"
+    )
+    results = load_results(names=(actuals_key, forecast_key))
     return (
-        results.get("Actuals", pd.DataFrame()),
+        results.get(actuals_key, pd.DataFrame()),
         results.get(forecast_key, pd.DataFrame()),
     )
 

@@ -4,12 +4,14 @@ from bokeh.resources import INLINE
 
 from dashboard.chart_data import (
     monthly_total_per_calendar_day,
+    weekly_total_per_calendar_day,
     yearly_total_per_calendar_day,
 )
 from dashboard.chart_format import build_forecast_colour_map
 from dashboard.chart_plot import (
     add_chart_legends,
     configure_month_axis,
+    configure_week_axis,
     create_plot,
 )
 from dashboard.chart_series import add_actual_series, add_forecast_series
@@ -34,6 +36,10 @@ def make_chart(
         actuals = monthly_total_per_calendar_day(chart_data, metric, forecast_only=False)
         forecasts = monthly_total_per_calendar_day(chart_data, metric, forecast_only=True)
         period_column = "Period"
+    elif period == "week":
+        actuals = weekly_total_per_calendar_day(chart_data, metric, forecast_only=False)
+        forecasts = weekly_total_per_calendar_day(chart_data, metric, forecast_only=True)
+        period_column = "Week"
     else:
         actuals = yearly_total_per_calendar_day(chart_data, metric, forecast_only=False)
         forecasts = yearly_total_per_calendar_day(chart_data, metric, forecast_only=True)
@@ -56,19 +62,31 @@ def make_chart(
 
     if period == "month":
         configure_month_axis(plot, actuals, forecasts, period_column)
+    elif period == "week":
+        configure_week_axis(plot, actuals, forecasts, period_column)
 
     chart_html = file_html(plot, INLINE, title=f"{metric} Lookback")
     chart_html = chart_html.replace(
         "</head>",
         '<meta name="viewport" content="width=device-width, initial-scale=1"></head>',
     )
-    if period != "month":
+    if period == "year":
         return chart_html
 
-    visible_months, table_rows = build_percentage_table(
-        chart_data, metric, month_count=None
-    )
-    table_json = serialize_percentage_table(visible_months, table_rows)
+    if period == "week":
+        from dashboard.chart_table import (
+            build_weekly_percentage_table,
+            serialize_weekly_percentage_table,
+        )
+        visible_weeks, table_rows = build_weekly_percentage_table(
+            chart_data, metric, week_count=None
+        )
+        table_json = serialize_weekly_percentage_table(visible_weeks, table_rows)
+    else:
+        visible_months, table_rows = build_percentage_table(
+            chart_data, metric, month_count=None
+        )
+        table_json = serialize_percentage_table(visible_months, table_rows)
     chart_html = chart_html.replace(
         "</body>",
         percentage_table_script(table_json) + "</body>",

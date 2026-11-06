@@ -5,9 +5,15 @@ from dashboard.colours import SHELL_VERY_DARK_GREY, SHELL_WHITE
 from dashboard.layout_components import create_dashboard_panel
 
 
-def create_layout(ipp_data: pd.DataFrame, op_data: pd.DataFrame = None):
+def create_layout(
+    ipp_data: pd.DataFrame,
+    op_data: pd.DataFrame = None,
+    ipp_weekly_data: pd.DataFrame = None,
+):
     if op_data is None:
         op_data = ipp_data
+    if ipp_weekly_data is None:
+        ipp_weekly_data = ipp_data
     return html.Div(
         style={
             "fontFamily": "Segoe UI, Arial, sans-serif",
@@ -26,6 +32,14 @@ def create_layout(ipp_data: pd.DataFrame, op_data: pd.DataFrame = None):
                         children=create_dashboard_panel(
                             ipp_data, "IPP Lookback", "ipp", "month",
                             include_well_status=False,
+                        ),
+                    ),
+                    dcc.Tab(
+                        label="IPP Weekly",
+                        value="ipp-weekly",
+                        children=create_dashboard_panel(
+                            ipp_weekly_data, "IPP Weekly", "ipp_week",
+                            "week", include_well_status=False,
                         ),
                     ),
                     dcc.Tab(

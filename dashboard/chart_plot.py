@@ -16,16 +16,23 @@ from dashboard.colours import (
 
 
 def create_plot(metric: str, period: str) -> object:
+    axis_labels = {
+        "month": "Month",
+        "week": "Week starting Monday",
+        "year": "Year",
+    }
     title_suffix = (
         "Monthly total divided by calendar days"
         if period == "month"
+        else "Weekly total divided by seven days"
+        if period == "week"
         else "Yearly total divided by calendar days"
     )
     plot = figure(
         width=1000,
         height=480,
         title=f"{metric} - {title_suffix}",
-        x_axis_label="Month" if period == "month" else "Year",
+        x_axis_label=axis_labels.get(period, "Year"),
         y_axis_label="kbpd",
         tools="pan,wheel_zoom,box_zoom,reset,save",
         active_scroll="wheel_zoom",
@@ -100,4 +107,30 @@ def configure_month_axis(plot, actuals: pd.DataFrame, forecasts: pd.DataFrame, p
     month_starts = pd.date_range(first_month, last_month, freq="MS")
     plot.xaxis.ticker = FixedTicker(
         ticks=[timestamp.value // 1_000_000 for timestamp in month_starts]
+    )
+
+
+def configure_week_axis(
+    plot,
+    actuals: pd.DataFrame,
+    forecasts: pd.DataFrame,
+    period_column: str,
+):
+    plot.xaxis[0].formatter = DatetimeTickFormatter(days="%d %b %Y", months="%d %b %Y")
+    if actuals.empty and forecasts.empty:
+        return
+    frames = [
+        frame[period_column] for frame in (actuals, forecasts) if not frame.empty
+    ]
+    parsed_dates = pd.to_datetime(pd.concat(frames, ignore_index=True)).dropna()
+    if parsed_dates.empty:
+        return
+    latest = parsed_dates.max()
+    earliest = parsed_dates.min()
+    visible_start = latest - pd.Timedelta(weeks=11)
+    plot.x_range.start = max(visible_start, earliest).value // 1_000_000
+    plot.x_range.end = latest.value // 1_000_000
+    week_starts = pd.date_range(earliest, latest, freq="W-MON")
+    plot.xaxis.ticker = FixedTicker(
+        ticks=[timestamp.value // 1_000_000 for timestamp in week_starts]
     )
